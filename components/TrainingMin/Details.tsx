@@ -4,17 +4,21 @@ import { View, Text, StyleSheet } from 'react-native';
 import { COLORS } from '../../assets/constants';
 //types
 import { Step } from '../../assets/types';
+//utils
+import { secToString } from '../../utils/timeConvert';
 
 interface Props {
     steps: Step[]
 }
 
 const Details = ({ steps }: Props) => {
+    const time = secToString(647)
+
     return (
         <View style={styles.wrapper}>
             {
-                steps.map((step: Step) => (
-                    <View style={styles.container}>
+                steps.map((step: Step, index: number) => (
+                    <View style={styles.container} key={index}>
                         {
                             step.rep > 1 &&
                             <View style={styles.blocRep}>
@@ -31,7 +35,7 @@ const Details = ({ steps }: Props) => {
                                         style={{ ...styles.intensityBloc, backgroundColor: COLORS.orangeBg }}
                                     >
                                         <Text style={styles.textIntensity}>Haute intensité</Text>
-                                        <Text style={ styles.textTime }>{ step.timeHigh }</Text>
+                                        <Text style={ styles.textTime }>{ secToString(step.timeHigh) }</Text>
                                     </View>
                                 }
                                 {
@@ -40,7 +44,7 @@ const Details = ({ steps }: Props) => {
                                         style={{ ...styles.intensityBloc, backgroundColor: COLORS.blackLight }}
                                     >
                                         <Text style={{ ...styles.textIntensity, color: 'white' }}>Basse intensité</Text>
-                                        <Text style={{...styles.textTime, color: COLORS.orangeBg}}>{ step.timeLow }</Text>
+                                        <Text style={{...styles.textTime, color: COLORS.orangeBg}}>{ secToString(step.timeLow) }</Text>
                                     </View>
                                 }
                             </View>

@@ -1,3 +1,7 @@
+export const imageMain = {
+    logo: require('./images/logo.png')
+}
+
 export const bgImages = [
     require('./images/0.jpg'),
     require('./images/1.jpg'),

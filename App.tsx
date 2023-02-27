@@ -2,6 +2,8 @@
 import { StatusBar } from 'expo-status-bar';
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { View, Image } from 'react-native';
+
 //compo
 import Trainings from './screens/Trainings/Trainings';
 import Musiques from './screens/Musiques/Musiques';
@@ -11,6 +13,7 @@ import { AntDesign } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
 //assets
 import { COLORS } from './assets/constants';
+import { imageMain } from './assets/images';
 
 const tab = createBottomTabNavigator()
 
@@ -49,7 +52,9 @@ export default function App() {
                     headerShown: true, //show or not header
                     headerStyle: {
                       backgroundColor: COLORS.orangeBg
-                    }
+                    },
+
+    
                 })}
           
         >
