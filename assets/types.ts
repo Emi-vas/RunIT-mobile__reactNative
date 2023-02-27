@@ -5,7 +5,7 @@ export type Training = {
     steps: Step[]
 }
 
-type Step = {
+export type Step = {
     name: string,
     timeHigh: number,
     timeLow: number,

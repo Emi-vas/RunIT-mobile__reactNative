@@ -43,15 +43,9 @@ export const trainings: Training[] = [
                 rep: 8
             },
             {
-                name: 'repos',
-                timeHigh: 0,
-                timeLow: 120,
-                rep: 1
-            },
-            {
                 name: 'retour au calme',
                 timeHigh: 0,
-                timeLow: 120,
+                timeLow: 300,
                 rep: 1
             },
 

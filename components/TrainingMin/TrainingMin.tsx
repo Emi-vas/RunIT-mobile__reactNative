@@ -1,5 +1,5 @@
-import React from 'react';
-import { View, Text, StyleSheet, Image } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 //assets
 import { bgImages, tools } from '../../assets/images';
 import { COLORS } from '../../assets/constants';
@@ -7,12 +7,16 @@ import { COLORS } from '../../assets/constants';
 import { AntDesign } from '@expo/vector-icons';
 //types
 import { Training } from '../../assets/types';
+//compo
+import Details from './Details';
 
 interface Props {
     training: Training
 }
 
 const TrainingMin = ({ training }: Props) => {
+    const [displayDetails, setDisplayDetails] = useState(false)
+
     return (
        <View style={styles.wrapper}>
             <Image source={bgImages[training.image]} style={styles.bgImage} />
@@ -26,11 +30,16 @@ const TrainingMin = ({ training }: Props) => {
                     <AntDesign name="doubleright" size={33} color="white" />
                     <Text style={styles.textButton}>Faire l'entrainement</Text>
                 </View>
-                <View style={styles.button}>
+                <TouchableOpacity 
+                    style={styles.button}
+                    onPress={() => setDisplayDetails((prev) => !prev)}
+                >
                     <AntDesign name="doubleright" size={33} color="white" />
                     <Text style={styles.textButton}>Détails</Text>
-                </View>
+                </TouchableOpacity>
             </View>
+
+            { displayDetails && <Details steps={training.steps} /> }
        </View>
     );
 };
@@ -42,8 +51,7 @@ const styles = StyleSheet.create({
     wrapper: {
         width: "100%",
         position: "relative",
-        height: 230,
-        marginVertical: 10
+        marginVertical: 20
     },
 
     //IMAGES

@@ -14,6 +14,10 @@ const Trainings = () => {
                 renderItem={({ item }) => <TrainingMin training={item} />}
                 keyExtractor={(item) => item.title}
                 showsVerticalScrollIndicator={false} //showsHorizontalScrollIndicator={false}
+                /* ItemSeparatorComponent={() => <View style={{height: 30}} />} */
+                ListFooterComponent={() => (
+                    <View style={{ marginTop: 30 }}></View>
+                )}
             />
        </View>
     );
