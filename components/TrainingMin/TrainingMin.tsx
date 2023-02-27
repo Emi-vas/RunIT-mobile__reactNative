@@ -6,6 +6,7 @@ import { bgImages, tools } from '../../assets/images';
 import { COLORS } from '../../assets/constants';
 //icons
 import { AntDesign } from '@expo/vector-icons';
+import { FontAwesome } from '@expo/vector-icons';
 //types
 import { Training } from '../../assets/types';
 import { StackTrainingsProps } from '../../assets/typesNavgation';
@@ -31,8 +32,9 @@ const TrainingMin = ({ training }: Props) => {
             <View style={styles.blocButtons}>
                 <TouchableOpacity 
                     style={styles.button}
-                    onPress={() => navigation.navigate('Training')}
+                    onPress={() => navigation.navigate('Training', {data: training})}
                 >
+                    
                     <AntDesign name="doubleright" size={33} color="white" />
                     <Text style={styles.textButton}>Faire l'entrainement</Text>
                 </TouchableOpacity>
@@ -40,7 +42,12 @@ const TrainingMin = ({ training }: Props) => {
                     style={styles.button}
                     onPress={() => setDisplayDetails((prev) => !prev)}
                 >
-                    <AntDesign name="doubleright" size={33} color="white" />
+                    {
+                        displayDetails ?
+                        <FontAwesome name="angle-double-down" size={43} color="white" />
+                        :
+                        <AntDesign name="doubleright" size={33} color="white" />
+                    }
                     <Text style={styles.textButton}>Détails</Text>
                 </TouchableOpacity>
             </View>

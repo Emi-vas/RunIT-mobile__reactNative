@@ -2,6 +2,32 @@ import { Training } from "../types";
 
 export const trainings: Training[] = [
     {
+        title: 'Test',
+        subTitle: `3" 2"`,
+        image: 3,
+        steps: [
+            {
+                name: 'échauffement',
+                timeHigh: 0,
+                timeLow: 10,
+                rep: 1
+            },
+            {
+                name: 'travail',
+                timeHigh: 7,
+                timeLow: 5,
+                rep: 3
+            },
+            {
+                name: 'retour au calme',
+                timeHigh: 0,
+                timeLow: 7,
+                rep: 1
+            },
+
+        ]
+    },
+    {
         title: 'Classique',
         subTitle: `30" 30"`,
         image: 0,

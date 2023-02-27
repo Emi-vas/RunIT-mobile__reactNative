@@ -12,7 +12,6 @@ interface Props {
 }
 
 const Details = ({ steps }: Props) => {
-    const time = secToString(647)
 
     return (
         <View style={styles.wrapper}>
@@ -60,7 +59,7 @@ export default Details;
 
 export const styles = StyleSheet.create({
     wrapper: {
-        backgroundColor: "#c27d2a",
+        backgroundColor: COLORS.orangeDark,
         alignItems: "center"
     },
     title: {

@@ -13,7 +13,6 @@ import { AntDesign } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
 //assets
 import { COLORS } from './assets/constants';
-import { imageMain } from './assets/images';
 
 const tab = createBottomTabNavigator()
 
@@ -49,7 +48,7 @@ export default function App() {
                         paddingBottom:30
                     },
     
-                    headerShown: true, //show or not header
+                    headerShown: false, //show or not header
                     headerStyle: {
                       backgroundColor: COLORS.orangeBg
                     },
