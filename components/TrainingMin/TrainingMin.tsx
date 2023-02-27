@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 //assets
 import { bgImages, tools } from '../../assets/images';
 import { COLORS } from '../../assets/constants';
@@ -7,6 +8,7 @@ import { COLORS } from '../../assets/constants';
 import { AntDesign } from '@expo/vector-icons';
 //types
 import { Training } from '../../assets/types';
+import { StackTrainingsProps } from '../../assets/typesNavgation';
 //compo
 import Details from './Details';
 
@@ -15,6 +17,7 @@ interface Props {
 }
 
 const TrainingMin = ({ training }: Props) => {
+    const navigation = useNavigation<StackTrainingsProps>()
     const [displayDetails, setDisplayDetails] = useState(false)
 
     return (
@@ -26,10 +29,13 @@ const TrainingMin = ({ training }: Props) => {
                 <Text style={styles.subTitle}>{training.subTitle}</Text>
             </View>
             <View style={styles.blocButtons}>
-                <View style={styles.button}>
+                <TouchableOpacity 
+                    style={styles.button}
+                    onPress={() => navigation.navigate('Training')}
+                >
                     <AntDesign name="doubleright" size={33} color="white" />
                     <Text style={styles.textButton}>Faire l'entrainement</Text>
-                </View>
+                </TouchableOpacity>
                 <TouchableOpacity 
                     style={styles.button}
                     onPress={() => setDisplayDetails((prev) => !prev)}
@@ -51,7 +57,7 @@ const styles = StyleSheet.create({
     wrapper: {
         width: "100%",
         position: "relative",
-        marginVertical: 20
+        marginBottom: 40
     },
 
     //IMAGES

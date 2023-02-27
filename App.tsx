@@ -6,8 +6,8 @@ import { View, Image } from 'react-native';
 
 //compo
 import Trainings from './screens/Trainings/Trainings';
-import Musiques from './screens/Musiques/Musiques';
 import Profile from './screens/Profile/Profile';
+import Musics from './screens/Musics/Musics';
 //icons
 import { AntDesign } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
@@ -59,7 +59,7 @@ export default function App() {
           
         >
               <tab.Screen name="Entrainements" component={Trainings}/>
-              <tab.Screen name="Musiques" component={Musiques} />
+              <tab.Screen name="Musiques" component={Musics} />
               <tab.Screen name="Mon plan" component={Profile} />
         </tab.Navigator>
     </NavigationContainer>

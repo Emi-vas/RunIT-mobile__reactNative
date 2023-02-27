@@ -1,12 +1,12 @@
 import React from 'react';
 import { View, Text } from 'react-native';
 
-const Musiques = () => {
+const Musics = () => {
     return (
         <View>
-            <Text>Musiques</Text>
+            <Text>Musics</Text>
         </View>
     );
 };
 
-export default Musiques;
+export default Musics;
