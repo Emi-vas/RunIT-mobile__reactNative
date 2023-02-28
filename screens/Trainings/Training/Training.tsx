@@ -13,46 +13,53 @@ const Training = () => {
     const { data } = route.params
     const steps = data.steps
     
-    const [start, setStart] = useState(false)
-    const [currentStep, setCurrentStep] = useState(0)
-    const [whatTime, setWhatTime] = useState('high')
-    const [rep, setRep] = useState(steps[0].rep)
+    const [start, setStart] = useState(false) //start btn
+    const [currentStep, setCurrentStep] = useState(0) //echauffement, travail, retour au calme
+    const [whatTime, setWhatTime] = useState('high') //time high intensity time or low intensity time
+    const [rep, setRep] = useState(steps[0].rep) //number of rep of set
     const [min, setMin] = useState(0)
     const [sec, setSec] = useState(0)
 
     useEffect(() => {
-        setRep(steps[currentStep].rep)
+        //if step change we set the rep of the new step
+        setRep(steps[currentStep].rep) 
     },[currentStep])
 
     useEffect(() => {
+        //handle start btn
         if(start == false) return
 
         let time = 0
         if(whatTime == "high") {
-            //setTime(steps[currentStep].timeHigh) 
+            //always start with high time
             time = steps[currentStep].timeHigh
         } else {
-            //setTime(steps[currentStep].timeLow)
+            //if it's low time
             time = steps[currentStep].timeLow
         }
 
-        const {min, sec} = secToMin(time)
+        //convert time in sec in min & sec
+        const { min, sec } = secToMin(time)
         setMin(min)
         setSec(sec)
 
         let timer: any 
 
+        //when time == 0
         const removeTimer = () => {
             clearInterval(timer)
-            setSec(0)
+            setSec(0) 
             if( whatTime == "high" ) {
+                //if time high is end, we switch on low time
                 setWhatTime('low')
-                console.log("low")
             } else if(whatTime == 'low') {
+                //if it's low time we change step (so we switch on high time)
                 setWhatTime('high')
                 if(rep == 1) {
+                    //if there is no more rep to do we change step
                     setCurrentStep(prev => prev + 1)
                 } else {
+                    //if there is another rep
                     setRep(prev => prev - 1)
                 }
             }
