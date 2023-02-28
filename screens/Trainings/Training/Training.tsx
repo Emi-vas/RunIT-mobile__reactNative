@@ -12,8 +12,10 @@ const Training = () => {
     const route = useRoute<TrainingRoute>()
     const { data } = route.params
     const steps = data.steps
+    let timer: any 
     
     const [start, setStart] = useState(false) //start btn
+    const [pause, setPause] = useState(false)
     const [currentStep, setCurrentStep] = useState(0) //echauffement, travail, retour au calme
     const [whatTime, setWhatTime] = useState('high') //time high intensity time or low intensity time
     const [rep, setRep] = useState(steps[0].rep) //number of rep of set
@@ -38,17 +40,18 @@ const Training = () => {
             time = steps[currentStep].timeLow
         }
 
-        //convert time in sec in min & sec
-        const { min, sec } = secToMin(time)
-        setMin(min)
-        setSec(sec)
-
-        let timer: any 
+       if(!pause) {
+         //convert time in sec in min & sec
+         const { min, sec } = secToMin(time)
+         setMin(min)
+         setSec(sec)
+       }
 
         //when time == 0
         const removeTimer = () => {
             clearInterval(timer)
-            setSec(0) 
+            setSec(0)
+            setPause(false) //to get new time
             if( whatTime == "high" ) {
                 //if time high is end, we switch on low time
                 setWhatTime('low')
@@ -57,7 +60,12 @@ const Training = () => {
                 setWhatTime('high')
                 if(rep == 1) {
                     //if there is no more rep to do we change step
-                    setCurrentStep(prev => prev + 1)
+                    if(steps[currentStep + 1]) {
+                        setCurrentStep(prev => prev + 1)
+                    } else {
+                        //END
+                        setStart(false)
+                    }
                 } else {
                     //if there is another rep
                     setRep(prev => prev - 1)
@@ -80,24 +88,32 @@ const Training = () => {
                 return prev - 1
             })
         }, 1000)
+
+        return () => clearInterval(timer)
     },[currentStep, whatTime, start])
 
+   
   
     return (
         <SafeAreaView 
         style={{
             ...styles.wrapper,
-            backgroundColor: (whatTime == "low" || steps[currentStep].timeHigh == 0) ? COLORS.orangeBg : COLORS.red
+            backgroundColor: (whatTime == "low" || steps[currentStep].timeHigh == 0) ? COLORS.orangeBg : COLORS.green
         }}
         >
             <Text style={styles.title}>{data.title}</Text>
             <Text style={styles.subTitle}>{data.subTitle}</Text>
 
-            <View style={styles.step}>
-                <Text style={styles.textStep}>Etape en cours :</Text>
-                <Text style={{...styles.textStep, fontWeight: "700"}}>
-                    {steps[currentStep].name}
-                </Text>
+            <View style={styles.blocStep}>
+                <View style={styles.step}>
+                    <Text style={styles.textStep}>Etape en cours :</Text>
+                    <Text style={{...styles.textStep, fontWeight: "700"}}>
+                        {steps[currentStep].name}
+                    </Text>
+                </View>
+                <View style={styles.rep}>
+                    <Text style={styles.textRep}>x{rep}</Text>
+                </View>
             </View>
 
             <View style={styles.nextStep}>
@@ -115,6 +131,23 @@ const Training = () => {
                     { sec < 10 && "0" }
                     {sec}
                 </Text>
+            </View>
+
+            <View style={styles.blocButton}>
+                <TouchableOpacity 
+                    style={styles.button}
+                    onPress={() => {
+                        if(!start) {
+                            setStart(true)
+                        }
+                        if(start) {
+                            setStart(false)
+                            setPause(true)
+                        }
+                    }}
+                >
+                    <Text style={styles.textButton}>{ !start ? "Start !" : "Stop" }</Text>
+                </TouchableOpacity>
             </View>
 
         </SafeAreaView>
@@ -156,6 +189,20 @@ const styles = StyleSheet.create({
         fontSize: 20,
         marginVertical: 3
     },
+    blocStep: {
+        flexDirection: "row",
+        alignItems: "center"
+    },
+    rep: {
+        padding: 10,
+        marginLeft: 3,
+    },
+    textRep: {
+        fontSize: 30,
+        color: COLORS.blackLight,
+        
+       
+    },
     nextStep: {
         padding: 20,
         borderRadius: 20,
@@ -176,5 +223,20 @@ const styles = StyleSheet.create({
         fontSize: 70,
         color: COLORS.blackLight,
         marginTop: 50
-    }
+    },
+
+    //BTN
+    blocButton: {
+        marginTop: 30
+    },
+    button: {
+        backgroundColor: "#2a88e4",
+        paddingHorizontal: 30,
+        paddingVertical: 15,
+        borderRadius: 50
+    },
+    textButton: {
+        fontSize: 30,
+        color: "white"
+    },
 })
