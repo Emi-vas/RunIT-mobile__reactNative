@@ -21,7 +21,7 @@ export const trainings: Training[] = [
             {
                 name: 'retour au calme',
                 timeHigh: 0,
-                timeLow: 7,
+                timeLow: 3,
                 rep: 1
             },
 

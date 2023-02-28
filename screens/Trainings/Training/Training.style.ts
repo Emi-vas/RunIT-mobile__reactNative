@@ -1,4 +1,4 @@
-import { StyleSheet } from "react-native/types"
+import { StyleSheet } from "react-native"
 import { COLORS } from "../../../assets/constants"
 
 
@@ -76,7 +76,8 @@ export const styles = StyleSheet.create({
 
     //BTN
     blocButton: {
-        marginTop: 30
+        marginTop: 30,
+        alignItems: "center",
     },
     button: {
         backgroundColor: "#2a88e4",
@@ -84,8 +85,41 @@ export const styles = StyleSheet.create({
         paddingVertical: 15,
         borderRadius: 50
     },
+   
     textButton: {
         fontSize: 30,
-        color: "white"
+        color: "white",
+        textAlign: "center"
+    },
+    button2: {
+        paddingHorizontal: 20,
+        paddingVertical: 10,
+        borderRadius: 50,
+        marginTop: 20
+    },
+    textButton2: {
+        fontSize: 27,
+        color: "#2a88e4",
+        textAlign: "center"
+    },
+})
+
+
+export const stylesEnd = StyleSheet.create({
+    wrapper: {
+        flex: 0.9,
+        justifyContent: "center",
+        alignItems: "center",
+    },
+    bg: {
+        width: "100%",
+        height: "100%",
+        resizeMode: "cover",
+        position: "absolute",
+    },
+
+    title: {
+        color: 'white',
+        fontSize: 50
     },
 })

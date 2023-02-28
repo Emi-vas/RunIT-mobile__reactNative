@@ -1,14 +1,16 @@
 import { useRoute } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity, SafeAreaView } from 'react-native';
-import { COLORS } from '../../../assets/constants';
+import { View, Text, TouchableOpacity, SafeAreaView, Image } from 'react-native';
 //types
 import { TrainingRoute } from '../../../assets/typesNavgation';
 //utils 
 import { secToMin } from '../../../utils/timeConvert';
 import { vibrate } from '../../../utils/vibrate';
 //style
-import { styles } from './Training.style';
+import { styles, stylesEnd } from './Training.style';
+//assets
+import { COLORS } from '../../../assets/constants';
+import { imageMain } from '../../../assets/images';
 
 
 const Training = () => {
@@ -25,6 +27,8 @@ const Training = () => {
     const [rep, setRep] = useState(steps[0].rep) //number of rep of set
     const [min, setMin] = useState(0)
     const [sec, setSec] = useState(0)
+
+    const [displayEnd, setDisplayEnd] = useState(false)
 
     const displayTime = (time: number) => {
         const { min, sec } = secToMin(time)
@@ -54,9 +58,7 @@ const Training = () => {
         if(start == false) return
         if(pause == true) time = saveTime
 
-        vibrate(1)
 
-        displayTime(time)
 
         //when time == 0
         const removeTimer = () => {
@@ -75,6 +77,7 @@ const Training = () => {
                     } else {
                         //END
                         setStart(false)
+                        setDisplayEnd(true)
                     }
                 } else {
                     //if there is another rep
@@ -82,6 +85,9 @@ const Training = () => {
                 }
             }
         }
+
+        vibrate(1)
+        displayTime(time)
 
         timer = setInterval(() => {
             if(time == 0) {
@@ -95,6 +101,10 @@ const Training = () => {
 
         return () => clearInterval(timer)
     },[currentStep, whatTime, start])
+
+
+
+    if(displayEnd) return <End />
 
     return (
         <SafeAreaView 
@@ -156,11 +166,40 @@ const Training = () => {
                 >
                     <Text style={styles.textButton}>{ !start ? "Start !" : "Stop" }</Text>
                 </TouchableOpacity>
+
+               {
+                    start &&
+                    <TouchableOpacity 
+                        style={styles.button2}
+                        onPress={() => {
+                            if(steps[currentStep + 1]) {
+                                setWhatTime('high')
+                                setCurrentStep(prev => prev + 1)
+                            } else {
+                                //END
+                                setStart(false)
+                                setDisplayEnd(true)
+                            }
+                        }}
+                    >
+                        <Text style={styles.textButton2}>Passer l'étape</Text>
+                    </TouchableOpacity>
+               }
             </View>
         </SafeAreaView>
     );
 };
-
 export default Training;
+
+
+const End = () => {
+    return(
+        <View style={stylesEnd.wrapper}>
+            <Image source={imageMain.end} style={stylesEnd.bg} />
+            
+            <Text style={stylesEnd.title}>Terminé !</Text>
+        </View>
+    )
+}
 
 
