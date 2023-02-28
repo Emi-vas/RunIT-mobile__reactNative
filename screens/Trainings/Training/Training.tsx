@@ -13,10 +13,10 @@ const Training = () => {
     const { data } = route.params
     const steps = data.steps
     let timer: any 
-    let time = 0
     
     const [start, setStart] = useState(false) //start btn
     const [pause, setPause] = useState(false)
+    const [saveTime, setSaveTime] = useState(0) //save time for pause
     const [currentStep, setCurrentStep] = useState(0) //echauffement, travail, retour au calme
     const [whatTime, setWhatTime] = useState('high') //time high intensity time or low intensity time
     const [rep, setRep] = useState(steps[0].rep) //number of rep of set
@@ -34,9 +34,8 @@ const Training = () => {
         setRep(steps[currentStep].rep) 
     },[currentStep])
 
-
-
     useEffect(() => {
+        let time = 0
        if(!pause) {
             if(whatTime == "high") {
                 //always start with high time
@@ -49,6 +48,7 @@ const Training = () => {
 
         //handle start btn
         if(start == false) return
+        if(pause == true) time = saveTime
 
         displayTime(time)
 
@@ -82,6 +82,7 @@ const Training = () => {
                 removeTimer()
             } else {
                 time = time - 1
+                setSaveTime(time)
                 displayTime(time)
             }
             
