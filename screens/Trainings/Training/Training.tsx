@@ -13,6 +13,7 @@ const Training = () => {
     const { data } = route.params
     const steps = data.steps
     let timer: any 
+    let time = 0
     
     const [start, setStart] = useState(false) //start btn
     const [pause, setPause] = useState(false)
@@ -22,36 +23,39 @@ const Training = () => {
     const [min, setMin] = useState(0)
     const [sec, setSec] = useState(0)
 
+    const displayTime = (time: number) => {
+        const { min, sec } = secToMin(time)
+        setMin(min)
+        setSec(sec)
+    }
+
     useEffect(() => {
         //if step change we set the rep of the new step
         setRep(steps[currentStep].rep) 
     },[currentStep])
 
+
+
     useEffect(() => {
+       if(!pause) {
+            if(whatTime == "high") {
+                //always start with high time
+                time = steps[currentStep].timeHigh
+            } else {
+                //if it's low time
+                time = steps[currentStep].timeLow
+            }
+       }
+
         //handle start btn
         if(start == false) return
 
-        let time = 0
-        if(whatTime == "high") {
-            //always start with high time
-            time = steps[currentStep].timeHigh
-        } else {
-            //if it's low time
-            time = steps[currentStep].timeLow
-        }
-
-       if(!pause) {
-         //convert time in sec in min & sec
-         const { min, sec } = secToMin(time)
-         setMin(min)
-         setSec(sec)
-       }
+        displayTime(time)
 
         //when time == 0
         const removeTimer = () => {
             clearInterval(timer)
-            setSec(0)
-            setPause(false) //to get new time
+            setPause(false)
             if( whatTime == "high" ) {
                 //if time high is end, we switch on low time
                 setWhatTime('low')
@@ -74,19 +78,13 @@ const Training = () => {
         }
 
         timer = setInterval(() => {
-            setSec((prev) => {
-                if(prev == 0) {
-                    setMin((prev) => {
-                        if(prev == 0) {
-                            removeTimer()
-                            return 0
-                        }
-                        return prev - 1
-                    })
-                    return 59
-                }
-                return prev - 1
-            })
+            if(time == 0) {
+                removeTimer()
+            } else {
+                time = time - 1
+                displayTime(time)
+            }
+            
         }, 1000)
 
         return () => clearInterval(timer)
