@@ -1,11 +1,14 @@
 import { useRoute } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity, SafeAreaView, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, SafeAreaView } from 'react-native';
 import { COLORS } from '../../../assets/constants';
 //types
 import { TrainingRoute } from '../../../assets/typesNavgation';
 //utils 
 import { secToMin } from '../../../utils/timeConvert';
+import { vibrate } from '../../../utils/vibrate';
+//style
+import { styles } from './Training.style';
 
 
 const Training = () => {
@@ -29,6 +32,7 @@ const Training = () => {
         setSec(sec)
     }
 
+
     useEffect(() => {
         //if step change we set the rep of the new step
         setRep(steps[currentStep].rep) 
@@ -36,19 +40,21 @@ const Training = () => {
 
     useEffect(() => {
         let time = 0
-       if(!pause) {
-            if(whatTime == "high") {
-                //always start with high time
-                time = steps[currentStep].timeHigh
-            } else {
-                //if it's low time
-                time = steps[currentStep].timeLow
-            }
-       }
+        if(!pause) {
+                if(whatTime == "high" ) {
+                    //always start with high time
+                    time = steps[currentStep].timeHigh
+                } else {
+                    //if it's low time
+                    time = steps[currentStep].timeLow
+                }
+        }
 
         //handle start btn
         if(start == false) return
         if(pause == true) time = saveTime
+
+        vibrate(1)
 
         displayTime(time)
 
@@ -85,14 +91,11 @@ const Training = () => {
                 setSaveTime(time)
                 displayTime(time)
             }
-            
         }, 1000)
 
         return () => clearInterval(timer)
     },[currentStep, whatTime, start])
 
-   
-  
     return (
         <SafeAreaView 
         style={{
@@ -122,15 +125,21 @@ const Training = () => {
                 </Text>
             </View>
 
-            <View>
-                <Text style={styles.chrono}>
-                    { min < 10 && "0" }
-                    {min} 
-                    :
-                    { sec < 10 && "0" }
-                    {sec}
-                </Text>
-            </View>
+            {   
+                start &&
+                <View>
+                    <Text style={styles.chrono}>
+                        { min < 10 && "0" }
+                        {min} 
+                        :
+                        { sec < 10 && "0" }
+                        {sec}
+                    </Text>
+                    <Text style={styles.chronoIntensity}>
+                        {(whatTime == "high" && steps[currentStep].timeHigh != 0) ? "Haute intensité" : "Basse intensité"}
+                    </Text>
+                </View>
+            }
 
             <View style={styles.blocButton}>
                 <TouchableOpacity 
@@ -148,7 +157,6 @@ const Training = () => {
                     <Text style={styles.textButton}>{ !start ? "Start !" : "Stop" }</Text>
                 </TouchableOpacity>
             </View>
-
         </SafeAreaView>
     );
 };
@@ -156,86 +164,3 @@ const Training = () => {
 export default Training;
 
 
-const styles = StyleSheet.create({
-    wrapper: {
-        alignItems: "center",
-        flex: 1
-    },
-    title: {
-        color: COLORS.orangeDark,
-        textAlign: "center",
-        fontSize: 40,
-        letterSpacing: 4,
-    },
-    subTitle: {
-        color: COLORS.blackLight,
-        textAlign: "center",
-        fontWeight: "800",
-        fontSize: 20,
-        marginVertical: 10
-    },
-
-    //stepBloc
-    step: {
-        backgroundColor: COLORS.orangeDark,
-        padding: 20,
-        borderRadius: 20,
-        marginTop: 30
-    },
-    textStep: {
-        color: "white",
-        textAlign: "center",
-        fontSize: 20,
-        marginVertical: 3
-    },
-    blocStep: {
-        flexDirection: "row",
-        alignItems: "center"
-    },
-    rep: {
-        padding: 10,
-        marginLeft: 3,
-    },
-    textRep: {
-        fontSize: 30,
-        color: COLORS.blackLight,
-        
-       
-    },
-    nextStep: {
-        padding: 20,
-        borderRadius: 20,
-        marginTop: 10,
-        borderColor: COLORS.orangeDark,
-        borderWidth: 2
-    },
-    textNextStep: {
-        color: COLORS.orangeDark,
-        textAlign: "center",
-        fontSize: 20,
-        marginVertical: 3
-    },
-
-
-    //CHRONO
-    chrono: {
-        fontSize: 70,
-        color: COLORS.blackLight,
-        marginTop: 50
-    },
-
-    //BTN
-    blocButton: {
-        marginTop: 30
-    },
-    button: {
-        backgroundColor: "#2a88e4",
-        paddingHorizontal: 30,
-        paddingVertical: 15,
-        borderRadius: 50
-    },
-    textButton: {
-        fontSize: 30,
-        color: "white"
-    },
-})
