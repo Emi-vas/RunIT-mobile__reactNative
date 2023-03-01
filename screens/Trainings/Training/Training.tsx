@@ -2,7 +2,6 @@ import { useRoute } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, SafeAreaView, Image, Vibration } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-
 //types
 import { TrainingRoute } from '../../../assets/typesNavgation';
 import { Step } from '../../../assets/types';
@@ -12,7 +11,6 @@ import { secToMin } from '../../../utils/timeConvert';
 import { styles, stylesEnd } from './Training.style';
 //assets
 import { COLORS } from '../../../assets/constants';
-import { imageMain } from '../../../assets/images';
 //compo
 import Details from '../../../components/TrainingMin/Details';
 
@@ -20,7 +18,6 @@ import Details from '../../../components/TrainingMin/Details';
 const Training = () => {
     const route = useRoute<TrainingRoute>()
     const { data } = route.params
-    let steps = data.steps
     let timer: any 
 
     const [start, setStart] = useState(false) //start btn
@@ -31,6 +28,8 @@ const Training = () => {
     const [saveTime, setSaveTime] = useState(0) //save time for pause
     const [min, setMin] = useState(0)
     const [sec, setSec] = useState(0)
+
+    const [steps, setSteps] = useState(JSON.parse(JSON.stringify(data.steps)))
 
     const [displayEnd, setDisplayEnd] = useState(false) //exercice done
 
@@ -62,6 +61,7 @@ const Training = () => {
             time = time - 1
 
             if(time < 0) {
+                finishExercice()
                 endTime()
             } else {
                 displayTime(time)
@@ -71,6 +71,16 @@ const Training = () => {
 
         return () => clearInterval(timer)
     },[start, step, subStep])
+
+    //track userActivity
+    const finishExercice = () => {
+        let userTrainingTemp = steps
+        userTrainingTemp[step].subSteps[subStep].isDone = [
+            ...userTrainingTemp[step].subSteps[subStep].isDone,
+            true 
+        ]
+        setSteps(userTrainingTemp)
+    }
 
     const endTime = () => {
         clearInterval(timer)
@@ -197,12 +207,12 @@ interface PropsEnd {
 }
 
 const End = ({ steps }: PropsEnd) => {
+    console.log(steps[0].subSteps[0].isDone)
     return(
         <SafeAreaView style={stylesEnd.wrapper}>
             <Text style={stylesEnd.title}>Terminé !</Text>
             <ScrollView
                 showsVerticalScrollIndicator={false}
-                style={{ paddingTop: 10 }}
             >
                 <Details steps={steps} />
             </ScrollView>

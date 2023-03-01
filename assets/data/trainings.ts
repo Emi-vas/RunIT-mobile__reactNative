@@ -43,7 +43,8 @@ export const trainings: any = [
                         isDone: []
                     }
                 ]
-            }, {
+            }, 
+            {
                 name: 'Série 2',
                 rep: 3,
                 subSteps: [

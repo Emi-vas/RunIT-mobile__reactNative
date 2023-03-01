@@ -110,7 +110,7 @@ export const stylesEnd = StyleSheet.create({
         flex: 0.9,
         justifyContent: "center",
         alignItems: "center",
-        backgroundColor: COLORS.orangeDark
+        backgroundColor: COLORS.orangeDark,
     },
     bg: {
         width: "100%",
