@@ -14,7 +14,7 @@ export type Step = {
 export type SubStep = {
     type: string,
     time: number,
-    isDone: boolean
+    isDone: boolean[]
 }
 
 

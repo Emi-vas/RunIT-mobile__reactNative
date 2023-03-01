@@ -13,7 +13,7 @@ export const trainings: any = [
                     {
                         type: "lowIntensity",
                         time: 2,
-                        isDone: false
+                        isDone: []
                     }
                 ]
             },
@@ -24,12 +24,38 @@ export const trainings: any = [
                     {
                         type: "highIntensity",
                         time: 3,
-                        isDone: false
+                        isDone: []
                     },
                     {
                         type: "lowIntensity",
                         time: 3,
-                        isDone: false
+                        isDone: []
+                    }
+                ]
+            },
+            {
+                name: 'Reccup',
+                rep: 1,
+                subSteps: [
+                    {
+                        type: "lowIntensity",
+                        time: 3,
+                        isDone: []
+                    }
+                ]
+            }, {
+                name: 'Série 2',
+                rep: 3,
+                subSteps: [
+                    {
+                        type: "highIntensity",
+                        time: 3,
+                        isDone: []
+                    },
+                    {
+                        type: "lowIntensity",
+                        time: 3,
+                        isDone: []
                     }
                 ]
             },
@@ -39,8 +65,8 @@ export const trainings: any = [
                 subSteps: [
                     {
                         type: "lowIntensity",
-                        time: 7,
-                        isDone: false
+                        time: 2,
+                        isDone: []
                     }
                 ]
             },

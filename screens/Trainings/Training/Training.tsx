@@ -1,8 +1,11 @@
 import { useRoute } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, SafeAreaView, Image, Vibration } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
+
 //types
 import { TrainingRoute } from '../../../assets/typesNavgation';
+import { Step } from '../../../assets/types';
 //utils 
 import { secToMin } from '../../../utils/timeConvert';
 //style
@@ -10,6 +13,8 @@ import { styles, stylesEnd } from './Training.style';
 //assets
 import { COLORS } from '../../../assets/constants';
 import { imageMain } from '../../../assets/images';
+//compo
+import Details from '../../../components/TrainingMin/Details';
 
 
 const Training = () => {
@@ -17,11 +22,11 @@ const Training = () => {
     const { data } = route.params
     let steps = data.steps
     let timer: any 
-    
+
     const [start, setStart] = useState(false) //start btn
     const [step, setStep] = useState(0)
     const [subStep, setSubStep] = useState(0)
-    const [rep, setRep] = useState(steps[0].rep)
+    const [rep, setRep] = useState(0)
     const [pause, setPause] = useState(false)
     const [saveTime, setSaveTime] = useState(0) //save time for pause
     const [min, setMin] = useState(0)
@@ -51,13 +56,7 @@ const Training = () => {
 
         if(!start) return
         if(pause) setPause(false)
-        Vibration.vibrate()
-        
-
-        const endTime = () => {
-            clearInterval(timer)
-            passEx()
-        }
+        //Vibration.vibrate()
 
         timer = setInterval(() => {
             time = time - 1
@@ -73,17 +72,9 @@ const Training = () => {
         return () => clearInterval(timer)
     },[start, step, subStep])
 
-    const passStep = () => {
-        //press btn to next step
-        if(steps[step + 1]) {
-            //there is step left
-            setSubStep(0)
-            setStep(step + 1)
-            return
-        } 
-
-        //end
-        setDisplayEnd(true)
+    const endTime = () => {
+        clearInterval(timer)
+        passEx()
     }
 
     const passEx = () => {
@@ -95,23 +86,26 @@ const Training = () => {
 
         if(rep > 1) {
             //there is rep left
-            setRep(rep - 1)
+            setRep(prev => prev - 1)
             setSubStep(0)
             return
         } 
+        passStep()
+    }
 
+    const passStep = () => {
+        //press btn to next step
         if(steps[step + 1]) {
             //there is step left
             setSubStep(0)
             setStep(step + 1)
             return
         } 
-
         //end
         setDisplayEnd(true)
     }
 
-    if(displayEnd) return <End />
+    if(displayEnd) return <End steps={steps} />
 
     return (
         <SafeAreaView 
@@ -135,7 +129,14 @@ const Training = () => {
                 </View>
             </View>
 
-            <TouchableOpacity onPress={passStep} style={styles.nextStep}>
+            <TouchableOpacity
+                onPress={() => {
+                    setSubStep(0)
+                    setRep(0)
+                    passStep()
+                }} 
+                style={styles.nextStep}
+            >
                 <Text style={styles.textNextStep}>Etape suivante :</Text>
                 <Text style={{...styles.textNextStep, fontWeight: "700"}}>
                     { steps[step + 1] ? steps[step + 1].name : "Terminé !"}
@@ -178,7 +179,9 @@ const Training = () => {
                     start &&
                     <TouchableOpacity 
                         style={styles.button2}
-                        onPress={passEx}
+                        onPress={() => {
+                            passEx()
+                        }} 
                     >
                         <Text style={styles.textButton2}>Passer </Text>
                     </TouchableOpacity>
@@ -189,14 +192,21 @@ const Training = () => {
 };
 export default Training;
 
+interface PropsEnd {
+    steps: Step[]
+}
 
-const End = () => {
+const End = ({ steps }: PropsEnd) => {
     return(
-        <View style={stylesEnd.wrapper}>
-            <Image source={imageMain.end} style={stylesEnd.bg} />
-            
+        <SafeAreaView style={stylesEnd.wrapper}>
             <Text style={stylesEnd.title}>Terminé !</Text>
-        </View>
+            <ScrollView
+                showsVerticalScrollIndicator={false}
+                style={{ paddingTop: 10 }}
+            >
+                <Details steps={steps} />
+            </ScrollView>
+        </SafeAreaView>
     )
 }
 

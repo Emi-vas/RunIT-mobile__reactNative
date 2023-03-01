@@ -4,5 +4,8 @@ export const COLORS = {
     orangeLight: '#ffdaae',
     orangeBg: "#fef4e4",
     orangeDark: "#c27d2a",
-    green: '#98ff81'
+    green: '#98ff81',
+    green2: '#0ab604',
+
+    red: "#fb4545"
 }

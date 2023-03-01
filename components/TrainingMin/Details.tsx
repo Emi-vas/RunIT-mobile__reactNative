@@ -2,6 +2,8 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 //assets
 import { COLORS } from '../../assets/constants';
+import { AntDesign } from '@expo/vector-icons';
+import { Feather } from '@expo/vector-icons';
 //types
 import { Step, SubStep } from '../../assets/types';
 //utils
@@ -71,6 +73,18 @@ const SubStepCompo = ({ subStep }: SubStepCompoProps) => {
             >
                 { secToString(subStep.time)   }
             </Text>
+
+            <View style={styles.isDone}>
+                {
+                    subStep.isDone.map((done, index) => {
+                        if(done) {
+                            return <Feather key={index} name="check-circle" size={24} color={COLORS.green2} />
+                        } else {
+                            return <AntDesign key={index} name="closecircleo" size={24} color={COLORS.red} />
+                        }
+                    })
+                }
+            </View>
         </View>
     )
 }
@@ -125,6 +139,13 @@ export const styles = StyleSheet.create({
         textAlign: 'center',
         fontSize: 19,
         fontWeight: "600"
+    },
+
+    //isDone
+    isDone: {
+        flexDirection: "row",
+        flexWrap: "wrap",
+        marginTop: 5
     }
 
 })
