@@ -55,7 +55,7 @@ const Training = () => {
 
         if(!start) return
         if(pause) setPause(false)
-        //Vibration.vibrate()
+        Vibration.vibrate()
 
         timer = setInterval(() => {
             time = time - 1

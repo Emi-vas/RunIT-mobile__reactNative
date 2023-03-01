@@ -80,7 +80,7 @@ export const styles = StyleSheet.create({
         alignItems: "center",
     },
     button: {
-        backgroundColor: "#2a88e4",
+        backgroundColor: COLORS.blue,
         paddingHorizontal: 30,
         paddingVertical: 15,
         borderRadius: 50
@@ -99,7 +99,7 @@ export const styles = StyleSheet.create({
     },
     textButton2: {
         fontSize: 27,
-        color: "#2a88e4",
+        color: COLORS.blue,
         textAlign: "center"
     },
 })

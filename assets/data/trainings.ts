@@ -1,6 +1,6 @@
 import { Training } from "../types";
 
-export const trainings: any = [
+export const trainings: Training[] = [
     {
         title: 'Test',
         subTitle: `3" 2"`,
@@ -73,57 +73,108 @@ export const trainings: any = [
             },
         ]
     },
-   /*  {
+    {
         title: 'Classique',
         subTitle: `30" 30"`,
         image: 0,
         steps: [
             {
-                name: 'échauffement',
-                timeHigh: 0,
-                timeLow: 600,
-                rep: 1
+                name: 'Echauffement',
+                rep: 1,
+                subSteps: [
+                    {
+                        type: "lowIntensity",
+                        time: 600,
+                        isDone: []
+                    }
+                ]
             },
             {
-                name: 'travail',
-                timeHigh: 30,
-                timeLow: 30,
-                rep: 8
+                name: 'Série 1',
+                rep: 8,
+                subSteps: [
+                    {
+                        type: "highIntensity",
+                        time: 30,
+                        isDone: []
+                    },
+                    {
+                        type: "lowIntensity",
+                        time: 30,
+                        isDone: []
+                    },
+                ]
             },
             {
-                name: 'repos',
-                timeHigh: 0,
-                timeLow: 120,
-                rep: 1
+                name: 'Récupération',
+                rep: 1,
+                subSteps: [
+                    {
+                        type: "lowIntensity",
+                        time: 120,
+                        isDone: []
+                    }
+                ]
             },
             {
-                name: 'travail',
-                timeHigh: 30,
-                timeLow: 30,
-                rep: 8
+                name: 'Série 2',
+                rep: 8,
+                subSteps: [
+                    {
+                        type: "highIntensity",
+                        time: 30,
+                        isDone: []
+                    },
+                    {
+                        type: "lowIntensity",
+                        time: 30,
+                        isDone: []
+                    },
+                ]
             },
             {
-                name: 'repos',
-                timeHigh: 0,
-                timeLow: 120,
-                rep: 1
+                name: 'Récupération',
+                rep: 1,
+                subSteps: [
+                    {
+                        type: "lowIntensity",
+                        time: 120,
+                        isDone: []
+                    }
+                ]
             },
             {
-                name: 'travail',
-                timeHigh: 30,
-                timeLow: 30,
-                rep: 8
+                name: 'Série 3',
+                rep: 8,
+                subSteps: [
+                    {
+                        type: "highIntensity",
+                        time: 30,
+                        isDone: []
+                    },
+                    {
+                        type: "lowIntensity",
+                        time: 30,
+                        isDone: []
+                    },
+                ]
             },
             {
-                name: 'retour au calme',
-                timeHigh: 0,
-                timeLow: 300,
-                rep: 1
+                name: 'Retour au calme',
+                rep: 1,
+                subSteps: [
+                    {
+                        type: "lowIntensity",
+                        time: 120,
+                        isDone: []
+                    }
+                ]
             },
 
         ]
     },
-    {
+ 
+    /*     {
         title: 'Court',
         subTitle: `15" 15"`,
         image: 1,

@@ -93,7 +93,7 @@ const SubStepCompo = ({ subStep }: SubStepCompoProps) => {
 export const styles = StyleSheet.create({
     wrapper: {
         backgroundColor: COLORS.orangeDark,
-        alignItems: "center"
+        alignItems: "center",
     },
     title: {
         color: "white",

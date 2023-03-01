@@ -1,12 +1,12 @@
 import React from 'react';
 import { View, Text } from 'react-native';
 
-const Create = () => {
+const CreateTraining = () => {
     return (
-       <View>
+        <View>
             <Text>Create</Text>
-       </View>
+        </View>
     );
 };
 
-export default Create;
+export default CreateTraining;

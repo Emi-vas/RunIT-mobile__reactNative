@@ -7,11 +7,13 @@ export type StackTrainings = {
     Training: {
         data: Training
     },
+    Create: undefined
 }
 
 export type StackTrainingsProps = NativeStackNavigationProp<
     StackTrainings,
-    'Training'
+    'Training',
+    'Create'
 >
 
 export type TrainingRoute = RouteProp<
