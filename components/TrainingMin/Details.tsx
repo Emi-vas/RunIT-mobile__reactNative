@@ -3,7 +3,7 @@ import { View, Text, StyleSheet } from 'react-native';
 //assets
 import { COLORS } from '../../assets/constants';
 //types
-import { Step } from '../../assets/types';
+import { Step, SubStep } from '../../assets/types';
 //utils
 import { secToString } from '../../utils/timeConvert';
 
@@ -12,13 +12,12 @@ interface Props {
 }
 
 const Details = ({ steps }: Props) => {
-
-    return (
+    return(
         <View style={styles.wrapper}>
             {
                 steps.map((step: Step, index: number) => (
                     <View style={styles.container} key={index}>
-                        {
+                         {
                             step.rep > 1 &&
                             <View style={styles.blocRep}>
                                 <Text style={styles.textRep}>X{step.rep}</Text>
@@ -29,22 +28,9 @@ const Details = ({ steps }: Props) => {
                             <Text style={styles.title}>{step.name}</Text>
                             <View style={styles.intensityCont}>
                                 {
-                                    step.timeHigh != 0 &&
-                                    <View 
-                                        style={{ ...styles.intensityBloc, backgroundColor: COLORS.orangeBg }}
-                                    >
-                                        <Text style={styles.textIntensity}>Haute intensité</Text>
-                                        <Text style={ styles.textTime }>{ secToString(step.timeHigh) }</Text>
-                                    </View>
-                                }
-                                {
-                                    step.timeLow != 0 &&
-                                    <View 
-                                        style={{ ...styles.intensityBloc, backgroundColor: COLORS.blackLight }}
-                                    >
-                                        <Text style={{ ...styles.textIntensity, color: 'white' }}>Basse intensité</Text>
-                                        <Text style={{...styles.textTime, color: COLORS.orangeBg}}>{ secToString(step.timeLow) }</Text>
-                                    </View>
+                                    step.subSteps.map((subStep: SubStep, index: number) => (
+                                        <SubStepCompo subStep={subStep} />
+                                    ))
                                 }
                             </View>
                         </View>
@@ -52,10 +38,43 @@ const Details = ({ steps }: Props) => {
                 ))
             }
         </View>
-    );
-};
+    )
+}
+export default Details
 
-export default Details;
+interface SubStepCompoProps {
+    subStep: SubStep
+}
+
+const SubStepCompo = ({ subStep }: SubStepCompoProps) => {
+    return (
+        <View 
+            style={{ 
+                ...styles.intensityBloc, 
+                backgroundColor: subStep.type == "highIntensity" ? COLORS.orangeBg : COLORS.blackLight
+            }}
+        >
+            <Text style={{
+                ...styles.textIntensity,
+                color: subStep.type == "highIntensity" ? COLORS.black : "white"
+            }}>
+                {
+                subStep.type == "lowIntensity" ?
+                "Basse intensité" : "Haute intensité"
+                }
+            </Text>
+            <Text 
+                style={{
+                    ...styles.textTime,
+                    color: subStep.type == "highIntensity" ? COLORS.black : "white"
+                }}
+            >
+                { secToString(subStep.time)   }
+            </Text>
+        </View>
+    )
+}
+
 
 export const styles = StyleSheet.create({
     wrapper: {

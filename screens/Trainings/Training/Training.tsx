@@ -5,7 +5,6 @@ import { View, Text, TouchableOpacity, SafeAreaView, Image, Vibration } from 're
 import { TrainingRoute } from '../../../assets/typesNavgation';
 //utils 
 import { secToMin } from '../../../utils/timeConvert';
-import { vibrate } from '../../../utils/vibrate';
 //style
 import { styles, stylesEnd } from './Training.style';
 //assets
@@ -16,7 +15,7 @@ import { imageMain } from '../../../assets/images';
 const Training = () => {
     const route = useRoute<TrainingRoute>()
     const { data } = route.params
-    const steps = data.steps
+    let steps = data.steps
     let timer: any 
     
     const [start, setStart] = useState(false) //start btn

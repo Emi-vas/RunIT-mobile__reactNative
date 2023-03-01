@@ -12,7 +12,8 @@ export const trainings: any = [
                 subSteps: [
                     {
                         type: "lowIntensity",
-                        time: 2
+                        time: 2,
+                        isDone: false
                     }
                 ]
             },
@@ -22,11 +23,13 @@ export const trainings: any = [
                 subSteps: [
                     {
                         type: "highIntensity",
-                        time: 3
+                        time: 3,
+                        isDone: false
                     },
                     {
                         type: "lowIntensity",
-                        time: 3
+                        time: 3,
+                        isDone: false
                     }
                 ]
             },
@@ -36,7 +39,8 @@ export const trainings: any = [
                 subSteps: [
                     {
                         type: "lowIntensity",
-                        time: 7
+                        time: 7,
+                        isDone: false
                     }
                 ]
             },
