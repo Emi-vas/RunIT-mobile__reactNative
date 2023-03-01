@@ -1,6 +1,6 @@
 import { useRoute } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity, SafeAreaView, Image } from 'react-native';
+import { View, Text, TouchableOpacity, SafeAreaView, Image, Vibration } from 'react-native';
 //types
 import { TrainingRoute } from '../../../assets/typesNavgation';
 //utils 
@@ -20,15 +20,15 @@ const Training = () => {
     let timer: any 
     
     const [start, setStart] = useState(false) //start btn
+    const [step, setStep] = useState(0)
+    const [subStep, setSubStep] = useState(0)
+    const [rep, setRep] = useState(steps[0].rep)
     const [pause, setPause] = useState(false)
     const [saveTime, setSaveTime] = useState(0) //save time for pause
-    const [currentStep, setCurrentStep] = useState(0) //echauffement, travail, retour au calme
-    const [whatTime, setWhatTime] = useState('high') //time high intensity time or low intensity time
-    const [rep, setRep] = useState(steps[0].rep) //number of rep of set
     const [min, setMin] = useState(0)
     const [sec, setSec] = useState(0)
 
-    const [displayEnd, setDisplayEnd] = useState(false)
+    const [displayEnd, setDisplayEnd] = useState(false) //exercice done
 
     const displayTime = (time: number) => {
         const { min, sec } = secToMin(time)
@@ -36,73 +36,76 @@ const Training = () => {
         setSec(sec)
     }
 
+    useEffect(() => {
+        //refresh number of rep when step change
+        setRep(steps[step].rep)
+    },[step])
+
 
     useEffect(() => {
-        //if step change we set the rep of the new step
-        setRep(steps[currentStep].rep) 
-    },[currentStep])
-
-    useEffect(() => {
-        let time = 0
-        if(!pause) {
-                if(whatTime == "high" ) {
-                    //always start with high time
-                    time = steps[currentStep].timeHigh
-                } else {
-                    //if it's low time
-                    time = steps[currentStep].timeLow
-                }
+        let time = steps[step].subSteps[subStep].time
+        if(pause) {
+            time = saveTime
         }
 
-        //handle start btn
-        if(start == false) return
-        if(pause == true) time = saveTime
-
-
-
-        //when time == 0
-        const removeTimer = () => {
-            clearInterval(timer)
-            setPause(false)
-            if( whatTime == "high" ) {
-                //if time high is end, we switch on low time
-                setWhatTime('low')
-            } else if(whatTime == 'low') {
-                //if it's low time we change step (so we switch on high time)
-                setWhatTime('high')
-                if(rep == 1) {
-                    //if there is no more rep to do we change step
-                    if(steps[currentStep + 1]) {
-                        setCurrentStep(prev => prev + 1)
-                    } else {
-                        //END
-                        setStart(false)
-                        setDisplayEnd(true)
-                    }
-                } else {
-                    //if there is another rep
-                    setRep(prev => prev - 1)
-                }
-            }
-        }
-
-        vibrate(1)
         displayTime(time)
 
+        if(!start) return
+        if(pause) setPause(false)
+        Vibration.vibrate()
+        
+
+        const endTime = () => {
+            clearInterval(timer)
+
+            if(steps[step].subSteps[subStep + 1]) {
+                setSubStep(subStep + 1)
+                return
+            }
+
+            if(rep > 1) {
+                //there is rep left
+                setRep(rep - 1)
+                setSubStep(0)
+                return
+            } 
+
+            if(steps[step + 1]) {
+                //there is step left
+                setSubStep(0)
+                setStep(step + 1)
+                return
+            } 
+
+            //end
+            setDisplayEnd(true)
+        }
+
         timer = setInterval(() => {
-            if(time == 0) {
-                removeTimer()
+            time = time - 1
+
+            if(time < 0) {
+                endTime()
             } else {
-                time = time - 1
-                setSaveTime(time)
                 displayTime(time)
+                setSaveTime(time)
             }
         }, 1000)
 
         return () => clearInterval(timer)
-    },[currentStep, whatTime, start])
+    },[start, step, subStep])
 
+    const passStep = () => {
+        if(steps[step + 1]) {
+            //there is step left
+            setSubStep(0)
+            setStep(step + 1)
+            return
+        } 
 
+        //end
+        setDisplayEnd(true)
+    }
 
     if(displayEnd) return <End />
 
@@ -110,7 +113,7 @@ const Training = () => {
         <SafeAreaView 
         style={{
             ...styles.wrapper,
-            backgroundColor: (whatTime == "low" || steps[currentStep].timeHigh == 0) ? COLORS.orangeBg : COLORS.green
+            backgroundColor:  steps[step].subSteps[subStep].type == "lowIntensity" ? COLORS.orangeBg : COLORS.green
         }}
         >
             <Text style={styles.title}>{data.title}</Text>
@@ -120,7 +123,7 @@ const Training = () => {
                 <View style={styles.step}>
                     <Text style={styles.textStep}>Etape en cours :</Text>
                     <Text style={{...styles.textStep, fontWeight: "700"}}>
-                        {steps[currentStep].name}
+                        {steps[step].name}
                     </Text>
                 </View>
                 <View style={styles.rep}>
@@ -131,25 +134,25 @@ const Training = () => {
             <View style={styles.nextStep}>
                 <Text style={styles.textNextStep}>Etape suivante :</Text>
                 <Text style={{...styles.textNextStep, fontWeight: "700"}}>
-                    {steps[currentStep + 1] ? steps[currentStep + 1].name : "Terminé ! "}
+                    { steps[step + 1] ? steps[step + 1].name : "Terminé !"}
                 </Text>
             </View>
 
-            {   
-                start &&
-                <View>
-                    <Text style={styles.chrono}>
-                        { min < 10 && "0" }
-                        {min} 
-                        :
-                        { sec < 10 && "0" }
-                        {sec}
-                    </Text>
-                    <Text style={styles.chronoIntensity}>
-                        {(whatTime == "high" && steps[currentStep].timeHigh != 0) ? "Haute intensité" : "Basse intensité"}
-                    </Text>
-                </View>
-            }
+            <View>
+                <Text style={styles.chrono}>
+                    { min < 10 && "0" }
+                    {min} 
+                    :
+                    { sec < 10 && "0" }
+                    {sec}
+                </Text>
+                <Text style={styles.chronoIntensity}>
+                    { 
+                        steps[step].subSteps[subStep].type == "lowIntensity" ?
+                        "Basse intensité" : "Haute intensité"
+                    }
+                </Text>
+            </View>
 
             <View style={styles.blocButton}>
                 <TouchableOpacity 
@@ -171,16 +174,7 @@ const Training = () => {
                     start &&
                     <TouchableOpacity 
                         style={styles.button2}
-                        onPress={() => {
-                            if(steps[currentStep + 1]) {
-                                setWhatTime('high')
-                                setCurrentStep(prev => prev + 1)
-                            } else {
-                                //END
-                                setStart(false)
-                                setDisplayEnd(true)
-                            }
-                        }}
+                        onPress={passStep}
                     >
                         <Text style={styles.textButton2}>Passer l'étape</Text>
                     </TouchableOpacity>

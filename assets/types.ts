@@ -7,9 +7,13 @@ export type Training = {
 
 export type Step = {
     name: string,
-    timeHigh: number,
-    timeLow: number,
-    rep: number
+    rep: number,
+    subSteps: SubStep[]
+}
+
+export type SubStep = {
+    type: string,
+    time: number
 }
 
 

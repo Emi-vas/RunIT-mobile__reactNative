@@ -1,6 +1,6 @@
 import { Training } from "../types";
 
-export const trainings: Training[] = [
+export const trainings: any = [
     {
         title: 'Test',
         subTitle: `3" 2"`,
@@ -8,26 +8,41 @@ export const trainings: Training[] = [
         steps: [
             {
                 name: 'échauffement',
-                timeHigh: 0,
-                timeLow: 10,
-                rep: 1
+                rep: 1,
+                subSteps: [
+                    {
+                        type: "lowIntensity",
+                        time: 2
+                    }
+                ]
             },
             {
-                name: 'travail',
-                timeHigh: 7,
-                timeLow: 5,
-                rep: 3
+                name: 'Série 1',
+                rep: 3,
+                subSteps: [
+                    {
+                        type: "highIntensity",
+                        time: 3
+                    },
+                    {
+                        type: "lowIntensity",
+                        time: 3
+                    }
+                ]
             },
             {
-                name: 'retour au calme',
-                timeHigh: 0,
-                timeLow: 3,
-                rep: 1
+                name: 'Retour au calme',
+                rep: 1,
+                subSteps: [
+                    {
+                        type: "lowIntensity",
+                        time: 7
+                    }
+                ]
             },
-
         ]
     },
-    {
+   /*  {
         title: 'Classique',
         subTitle: `30" 30"`,
         image: 0,
@@ -172,7 +187,7 @@ export const trainings: Training[] = [
                 timeHigh: 0,
                 timeLow: 300,
                 rep: 1
-            },
+            }, 
         ]
     },
     {
@@ -223,5 +238,5 @@ export const trainings: Training[] = [
                 rep: 1
             },
         ]
-    },
+    }*/
 ]
