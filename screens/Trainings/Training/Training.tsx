@@ -56,28 +56,7 @@ const Training = () => {
 
         const endTime = () => {
             clearInterval(timer)
-
-            if(steps[step].subSteps[subStep + 1]) {
-                setSubStep(subStep + 1)
-                return
-            }
-
-            if(rep > 1) {
-                //there is rep left
-                setRep(rep - 1)
-                setSubStep(0)
-                return
-            } 
-
-            if(steps[step + 1]) {
-                //there is step left
-                setSubStep(0)
-                setStep(step + 1)
-                return
-            } 
-
-            //end
-            setDisplayEnd(true)
+            passEx()
         }
 
         timer = setInterval(() => {
@@ -95,6 +74,32 @@ const Training = () => {
     },[start, step, subStep])
 
     const passStep = () => {
+        //press btn to next step
+        if(steps[step + 1]) {
+            //there is step left
+            setSubStep(0)
+            setStep(step + 1)
+            return
+        } 
+
+        //end
+        setDisplayEnd(true)
+    }
+
+    const passEx = () => {
+        //press btn to pass exercice
+        if(steps[step].subSteps[subStep + 1]) {
+            setSubStep(subStep + 1)
+            return
+        }
+
+        if(rep > 1) {
+            //there is rep left
+            setRep(rep - 1)
+            setSubStep(0)
+            return
+        } 
+
         if(steps[step + 1]) {
             //there is step left
             setSubStep(0)
@@ -130,12 +135,12 @@ const Training = () => {
                 </View>
             </View>
 
-            <View style={styles.nextStep}>
+            <TouchableOpacity onPress={passStep} style={styles.nextStep}>
                 <Text style={styles.textNextStep}>Etape suivante :</Text>
                 <Text style={{...styles.textNextStep, fontWeight: "700"}}>
                     { steps[step + 1] ? steps[step + 1].name : "Terminé !"}
                 </Text>
-            </View>
+            </TouchableOpacity>
 
             <View>
                 <Text style={styles.chrono}>
@@ -173,9 +178,9 @@ const Training = () => {
                     start &&
                     <TouchableOpacity 
                         style={styles.button2}
-                        onPress={passStep}
+                        onPress={passEx}
                     >
-                        <Text style={styles.textButton2}>Passer l'étape</Text>
+                        <Text style={styles.textButton2}>Passer </Text>
                     </TouchableOpacity>
                }
             </View>

@@ -29,7 +29,7 @@ const Details = ({ steps }: Props) => {
                             <View style={styles.intensityCont}>
                                 {
                                     step.subSteps.map((subStep: SubStep, index: number) => (
-                                        <SubStepCompo subStep={subStep} />
+                                        <SubStepCompo subStep={subStep} key={index} />
                                     ))
                                 }
                             </View>
